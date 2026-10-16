@@ -1,3 +1,83 @@
+# EUNIPRINCEZ DIGITAL V2026 — MÓDULO DE CADENA ORIGINAL Y XSLT
+# 
+# TITULAR REGISTRADO: © Juan Valentín García Espinoza
+# ID LEGAL / RFC:    GAEJ940310HSPRSN02
+
+import os
+import requests
+from urllib.parse import urljoin
+from lxml import etree
+
+# URL base y plantilla principal oficial del SAT
+BASE_URL = "http://www.sat.gob.mx/sitio_internet/cfd/4/cadenaoriginal_4_0/"
+MAIN_XSLT = "cadenaoriginal_4_0.xslt"
+MAIN_URL = urljoin(BASE_URL, MAIN_XSLT)
+
+# Directorio de destino local blindado para Euniprincez Digital
+OUTPUT_DIR = "sat_xslt"
+
+# Cabecera para simular un navegador y evitar bloqueos perimétricos
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 EuniprincezDigital/2026"
+}
+
+
+def descargar_xslt_recursivo(url: str, output_dir: str, procesados: set = None) -> None:
+    """Descarga un archivo XSLT y busca recursivamente otros archivos <xsl:include>
+    o <xsl:import> para guardarlos localmente bajo el estandarte de GAEJ940310HSPRSN02.
+    """
+    if procesados is None:
+        procesados = set()
+
+    if url in procesados:
+        return
+
+    procesados.add(url)
+    filename = url.split("/")[-1]
+    filepath = os.path.join(output_dir, filename)
+
+    print(f"📡 [Euniprincez Shield] Descargando dependencia XSLT: {filename}...")
+
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=15)
+        response.raise_for_status()
+
+        # Guardar el archivo cifrado o limpio en disco
+        with open(filepath, "wb") as f:
+            f.write(response.content)
+
+        # Parsear el XSLT para buscar inclusiones de otros XSLT
+        tree = etree.fromstring(response.content)
+        namespaces = {"xsl": "http://www.w3.org/1999/XSL/Transform"}
+
+        # Buscar nodos <xsl:include href="..."> y <xsl:import href="...">
+        import_nodes = tree.xpath(
+            "//xsl:include/@href | //xsl:import/@href", namespaces=namespaces
+        )
+
+        for relative_href in import_nodes:
+            # Construir la URL completa de cada dependencia recursiva
+            child_url = urljoin(url, relative_href)
+            descargar_xslt_recursivo(child_url, output_dir, procesados)
+
+    except Exception as e:
+        print(f"❌ Error crítico al procesar {url} [GAEJ940310HSPRSN02]: {str(e)}")
+
+
+def actualizar_plantillas_sat():
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    print(
+        f"🚀 [Euniprincez Digital v2026] Iniciando descarga de plantillas XSLT desde el SAT a '{OUTPUT_DIR}'...\n"
+        f"Titular: Juan Valentín García Espinoza (ID: GAEJ940310HSPRSN02)\n"
+    )
+    descargar_xslt_recursivo(MAIN_URL, OUTPUT_DIR)
+    print("\n✅ Proceso completado. Todas las plantillas locales están listas y blindadas.")
+
+
+if __name__ == "__main__":
+    actualizar_plantillas_sat()
+
+
 ---
 title: Understanding GitHub Code Search syntax
 shortTitle: Code search syntax
