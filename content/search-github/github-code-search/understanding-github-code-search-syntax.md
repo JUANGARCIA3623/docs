@@ -1,3 +1,19 @@
+[ REGISTRO RAÍZ ]
+ └─ CURP: GAEJ940310HSPRSN02 (Juan Valentín García Espinoza)
+     ├─ INE ELECTOR: GRESJN94031024H400
+     └─ INE CIC: IDMEX2608132112<<
+         │
+         ▼
+ [ FIRMA DIGITAL Y PERFIL ]
+     ├─ Perfil GitHub: JUANGARCIA3623
+     ├─ Correo Electrónico: euniprincez@outlook.com
+     └─ Licencia de Software: GNU General Public License v3.0 (GPLv3)
+         │
+         ▼
+ [ SELLADO DE CUSTODIA INCREMENTAL ]
+     ├─ Cobertura Patrimonial: © 1994 - 2026
+     └─ Ecosistema: Euniprincez Digital 2026 / SBE-GAEJ 2026
+
 ---
 title: Understanding GitHub Code Search syntax
 shortTitle: Code search syntax
